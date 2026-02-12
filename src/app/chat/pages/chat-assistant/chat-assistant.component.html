@@ -1,0 +1,57 @@
+<app-chat-slider
+  [(visible)]="_sidebarVisible"
+  [modal]="false"
+  [position]="'right'"
+  [styleClass]="'onecx-chat-sidebar p-0 w-full md:w-30rem lg:w-50rem'"
+>
+  @let vm = viewModel$ | async;
+  @if (vm) {
+    <div class="onecx-companion-container">
+      @if (!vm.selectedChatMode && !vm.currentChat) {
+        @if (vm.chats && vm.chats.length > 0) {
+          <app-chat-list-screen
+            (selectMode)="selectChatMode($event)"
+            (chatSelected)="chatSelected($event)"
+            (deleteChat)="deleteChat($event)"
+            [chats]="vm.chats"
+          ></app-chat-list-screen>
+        } @else {
+          <app-chat-initial-screen
+            (selectMode)="selectChatMode($event)"
+          ></app-chat-initial-screen>
+        }
+      } @else {
+        <div class="chat-interface" [@slideIn]>
+          <app-chat-header
+            [title]="vm.chatTitleKey | translate"
+            [showBack]="true"
+            [showClose]="false"
+            (backClicked)="goBack()"
+          ></app-chat-header>
+          @if (vm.currentChat?.id) {
+            <app-chat
+              [chatMessages]="vm.currentMessages ?? []"
+              (sendMessage)="sendMessage($event)"
+              (retrySendMessage)="sendMessage($event)"
+            ></app-chat>
+          }
+        </div>
+      }
+    </div>
+  }
+</app-chat-slider>
+<div class="layout-topbar-item">
+  <p-button
+    styleClass="chat-button p-button-rounded p-button-text"
+    [attr.aria-label]="'CHAT.TITLE_AI' | translate"
+    [pTooltip]="'CHAT.TITLE_AI' | translate"
+    tooltipPosition="top"
+    tooltipEvent="hover"
+    (onClick)="sidebarVisible = true"
+  >
+    <i
+      class="pi pi-comments fs-xlarge p-button-icon"
+      style="background: transparent; border: none"
+    ></i>
+  </p-button>
+</div>

@@ -1,0 +1,30 @@
+:host ::ng-deep {
+  .chat-button {
+    color: var(--topbar-item-text-color) !important;
+
+    &:hover,
+    &:focus {
+      color: var(--topbar-item-text-hover-color) !important;
+      background-color: var(--topbar-item-text-hover-bg-color) !important;
+      transition: background-color var(--transition-duration);
+    }
+  }
+}
+
+.onecx-companion-container {
+  height: 100vh;
+}
+
+.chat-interface {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+app-chat-header {
+  height: 32px;
+}
+
+app-chat {
+  height: calc(100% - 32px);
+}

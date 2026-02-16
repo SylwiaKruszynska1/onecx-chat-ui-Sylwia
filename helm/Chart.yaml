@@ -6,7 +6,7 @@ home: https://github.com/onecx/onecx-chat-ui
 keywords:
   - onecx-chat-ui
 sources:
-  - https://github.com/onecx-apps/onecx-chat-ui
+  - https://github.com/onecx/onecx-chat-ui
 maintainers:
   - name: Tkit Developer
     email: tkit_dev@1000kit.org

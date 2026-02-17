@@ -1,35 +1,34 @@
 {
   "root": true,
-  "ignorePatterns": ["!**/*"],
-  "plugins": ["@nx"],
+  "plugins": ["@nx", "deprecation"],
   "overrides": [
     {
+      "files": ["*.ts"],
+      "extends": ["plugin:deprecation/recommended"],
+      "parserOptions": {
+        "project": ["./tsconfig.*?.json"]
+      },
+      "rules": {
+        "deprecation/deprecation": "warn"
+      }
+    },
+    {
       "files": ["*.ts", "*.tsx"],
-      "extends": [
-        "plugin:@nx/typescript",
-        "plugin:@nx/angular",
-        "plugin:@angular-eslint/template/process-inline-templates"
-      ],
+      "extends": ["plugin:@nx/typescript"],
+      "rules": {}
+    },
+    {
+      "files": ["*.js", "*.jsx"],
+      "extends": ["plugin:@nx/javascript"],
+      "rules": {}
+    },
+    {
+      "files": ["*.ts"],
+      "extends": ["plugin:@nx/angular", "plugin:@angular-eslint/template/process-inline-templates"],
       "rules": {
         "no-unused-vars": "off",
-        "@typescript-eslint/no-unused-vars": [
-          "error",
-          {
-            "vars": "all",
-            "args": "none"
-          }
-        ],
-        "@typescript-eslint/no-explicit-any": "warn",
-        "@typescript-eslint/ban-types": [
-          "error",
-          {
-            "extendDefaults": true,
-            "types": {
-              "{}": false
-            }
-          }
-        ],
-        "@typescript-eslint/no-var-requires": "off",
+        "@typescript-eslint/no-unused-vars": ["error", { "vars": "all", "args": "none" }],
+        "@typescript-eslint/no-explicit-any": "off",
         "@angular-eslint/directive-selector": [
           "error",
           {

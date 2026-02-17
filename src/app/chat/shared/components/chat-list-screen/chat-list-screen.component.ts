@@ -9,12 +9,10 @@ import { CardModule } from 'primeng/card';
 import { ContextMenu, ContextMenuModule } from 'primeng/contextmenu';
 import { InputTextModule } from 'primeng/inputtext';
 import { TabViewModule } from 'primeng/tabview';
-import { map, Observable, of, switchMap, forkJoin, startWith } from 'rxjs';
+import { map, Observable, of, switchMap, forkJoin } from 'rxjs';
 import { Chat } from 'src/app/shared/generated';
 import { ChatHeaderComponent } from '../chat-header/chat-header.component';
 import { ChatOptionButtonComponent } from '../chat-option-button/chat-option-button.component';
-import { startsWith } from '@onecx/angular-webcomponents';
-
 
 @Component({
   selector: 'app-chat-list-screen',

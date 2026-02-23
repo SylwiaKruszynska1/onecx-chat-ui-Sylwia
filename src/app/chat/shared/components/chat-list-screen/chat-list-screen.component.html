@@ -1,6 +1,6 @@
 <div class="flex flex-column h-screen">
   <app-chat-header
-    [title]="(greetingTranslated$ | async)!"
+    [title]="getGreetingKey() | translate"
     [showClose]="true"
     (closed)="selectMode.emit('close')"
   ></app-chat-header>

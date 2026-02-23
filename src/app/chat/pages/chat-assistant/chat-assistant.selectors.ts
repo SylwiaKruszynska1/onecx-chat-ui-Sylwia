@@ -11,6 +11,21 @@ export const chatAssistantSelectors = createChildSelectors(
   initialState
 );
 
+const mapChatTypeToTitleKey = (t?: ChatType | string | null) => {
+  if (!t) return 'CHAT.TITLE.DEFAULT';
+  const s = String(t);
+  switch (s) {
+    case ChatType.AiChat:
+      return 'CHAT.TITLE.AI';
+    case ChatType.HumanGroupChat:
+      return 'CHAT.TITLE.GROUP';
+    case ChatType.HumanDirectChat:
+      return 'CHAT.TITLE.DIRECT';
+    default:
+      return 'CHAT.TITLE.DEFAULT';
+  }
+};
+
 export const selectChatAssistantViewModel = createSelector(
   chatAssistantSelectors.selectChats,
   chatAssistantSelectors.selectCurrentChat,
@@ -22,21 +37,7 @@ export const selectChatAssistantViewModel = createSelector(
     currentMessages: Message[] | undefined,
     state,
   ): ChatAssistantViewModel => {
-    const mapTypeToTitleKey = (t?: ChatType | string | null) => {
-      if (!t) return 'CHAT.TITLE.DEFAULT';
-      const s = String(t);
-      switch (s) {
-        case ChatType.AiChat:
-          return 'CHAT.TITLE.AI';
-        case ChatType.HumanGroupChat:
-          return 'CHAT.TITLE.GROUP';
-        case ChatType.HumanDirectChat:
-          return 'CHAT.TITLE.DIRECT';
-        default:
-          return 'CHAT.TITLE.DEFAULT';
-      }
-    };
-    const chatTitleKey = mapTypeToTitleKey(currentChat?.type ?? state.selectedChatMode);
+    const chatTitleKey = mapChatTypeToTitleKey(currentChat?.type ?? state.selectedChatMode);
     return {
       chats,
       currentChat: currentChat,

@@ -281,40 +281,18 @@ describe('ChatListScreenComponent', () => {
   });
 
   describe('getGreetingKey', () => {
-    it('returns morning greeting when hour is morning', async () => {
-      const translateService = TestBed.inject(TranslateService);
-      jest.spyOn(Date.prototype, 'getHours').mockReturnValue(6);
+    const cases: Array<[number, string]> = [
+      [6, 'CHAT.INITIAL.GREETING_MORNING'],
+      [13, 'CHAT.INITIAL.GREETING_AFTERNOON'],
+      [22, 'CHAT.INITIAL.GREETING_EVENING'],
+    ];
 
-      const result = await firstValueFrom((component as any).getGreetingKey());
-
-      const expected = translateService.instant('CHAT.INITIAL.GREETING_MORNING');
-      expect(result).toBe(expected);
-
-      (Date.prototype.getHours as jest.Mock).mockRestore();
-    });
-
-    it('returns afternoon greeting when hour is afternoon', async () => {
-      const translateService = TestBed.inject(TranslateService);
-      jest.spyOn(Date.prototype, 'getHours').mockReturnValue(13);
-
-      const result = await firstValueFrom((component as any).getGreetingKey());
-
-      const expected = translateService.instant('CHAT.INITIAL.GREETING_AFTERNOON');
-      expect(result).toBe(expected);
-
-      (Date.prototype.getHours as jest.Mock).mockRestore();
-    });
-
-    it('returns evening greeting when hour is evening', async () => {
-      const translateService = TestBed.inject(TranslateService);
-      jest.spyOn(Date.prototype, 'getHours').mockReturnValue(22);
-
-      const result = await firstValueFrom((component as any).getGreetingKey());
-
-      const expected = translateService.instant('CHAT.INITIAL.GREETING_EVENING');
-      expect(result).toBe(expected);
-
-      (Date.prototype.getHours as jest.Mock).mockRestore();
+    cases.forEach(([hour, expected]) => {
+      it(`returns ${expected} when hour is ${hour}`, () => {
+        jest.spyOn(Date.prototype, 'getHours').mockReturnValue(hour as number);
+        const key = (component as any).getGreetingKey();
+        expect(key).toBe(expected);
+      });
     });
   });
 });

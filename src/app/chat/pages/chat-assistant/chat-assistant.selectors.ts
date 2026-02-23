@@ -22,18 +22,21 @@ export const selectChatAssistantViewModel = createSelector(
     currentMessages: Message[] | undefined,
     state,
   ): ChatAssistantViewModel => {
-    let chatTitleKey = 'CHAT.TITLE.DEFAULT';
-    switch (state.selectedChatMode) {
-      case ChatType.AiChat:
-        chatTitleKey = 'CHAT.TITLE.AI';
-        break;
-      case ChatType.HumanDirectChat:
-        chatTitleKey = 'CHAT.TITLE.DIRECT';
-        break;
-      case ChatType.HumanGroupChat:
-        chatTitleKey = 'CHAT.TITLE.GROUP';
-        break;
-    }
+    const mapTypeToTitleKey = (t?: ChatType | string | null) => {
+      if (!t) return 'CHAT.TITLE.DEFAULT';
+      const s = String(t);
+      switch (s) {
+        case ChatType.AiChat:
+          return 'CHAT.TITLE.AI';
+        case ChatType.HumanGroupChat:
+          return 'CHAT.TITLE.GROUP';
+        case ChatType.HumanDirectChat:
+          return 'CHAT.TITLE.DIRECT';
+        default:
+          return 'CHAT.TITLE.DEFAULT';
+      }
+    };
+    const chatTitleKey = mapTypeToTitleKey(currentChat?.type ?? state.selectedChatMode);
     return {
       chats,
       currentChat: currentChat,

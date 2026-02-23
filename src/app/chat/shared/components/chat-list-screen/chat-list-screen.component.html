@@ -1,6 +1,6 @@
 <div class="flex flex-column h-screen">
   <app-chat-header
-    [title]="'CHAT.INITIAL.GREETING' | translate"
+    [title]="(greetingTranslated$ | async)!"
     [showClose]="true"
     (closed)="selectMode.emit('close')"
   ></app-chat-header>
@@ -31,7 +31,12 @@
           ></p-avatar>
           <div class="flex flex-column align-items-start">
               <span class="font-semibold">
-                {{ chat.type === 'AI_CHAT' ? ('CHAT.TITLE.AI' | translate) : (chat.type === 'HUMAN_CHAT' ? ('CHAT.TITLE.DIRECT' | translate) : chat.type) }}
+                @switch (chat.type) {
+                  @case ('AI_CHAT') { {{ 'CHAT.TITLE.AI' | translate }} }
+                  @case ('HUMAN_DIRECT_CHAT') { {{ 'CHAT.TITLE.DIRECT' | translate }} }
+                  @case ('HUMAN_GROUP_CHAT') { {{ 'CHAT.TITLE.GROUP' | translate }} }
+                  @default { {{ 'CHAT.TITLE.DEFAULT' | translate }} }
+                }
               </span>
             <span class="text-600 text-sm">{{ chat.topic!.split(" ").slice(1).join(" ") }}</span>
           </div>

@@ -191,15 +191,17 @@ export class ChatAssistantEffects {
       concatLatestFrom(() => [
         this.store.select(chatAssistantSelectors.selectUser),
         this.store.select(chatAssistantSelectors.selectTopic),
+        this.store.select(chatAssistantSelectors.selectCurrentChat),
       ]),
       filter(([, user]) => user !== undefined),
-      switchMap(([action, user, topic]) => {
+      switchMap(([action, user, topic, currentChat]) => {
         const messageExtract =
           action.message.length > CHAT_TOPIC_LENGTH
             ? action.message.substring(0, CHAT_TOPIC_LENGTH) + '...'
             : action.message;
         const chatTopic = `${topic}: ${messageExtract}`;
-        return this.createChat(user as ChatUser, chatTopic).pipe(
+        const chatType = currentChat?.type ?? ChatType.AiChat;
+        return this.createChat(user as ChatUser, chatTopic, chatType).pipe(
           map((chat) =>
             ChatAssistantActions.messageSentForNewChat({
               chat,
@@ -218,9 +220,9 @@ export class ChatAssistantEffects {
     );
   });
 
-  createChat = (user: ChatUser, topic: string) => {
+  createChat = (user: ChatUser, topic: string, chatType: ChatType = ChatType.AiChat) => {
     return this.chatInternalService.createChat({
-      type: ChatType.AiChat,
+      type: chatType,
       topic: topic,
       participants: [
         {

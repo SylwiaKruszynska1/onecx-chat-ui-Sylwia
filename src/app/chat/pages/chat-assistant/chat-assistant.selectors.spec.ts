@@ -102,7 +102,7 @@ describe('ChatAssistant Selectors', () => {
 
       const result = fromSelectors.selectChatAssistantViewModel.projector(
         mockChats,
-        mockCurrentChat,
+        undefined,
         mockMessages,
         mockState
       );
@@ -118,7 +118,7 @@ describe('ChatAssistant Selectors', () => {
 
       const result = fromSelectors.selectChatAssistantViewModel.projector(
         mockChats,
-        mockCurrentChat,
+        undefined,
         mockMessages,
         mockState
       );
@@ -134,9 +134,22 @@ describe('ChatAssistant Selectors', () => {
 
       const result = fromSelectors.selectChatAssistantViewModel.projector(
         mockChats,
-        mockCurrentChat,
+        undefined,
         mockMessages,
         mockState
+      );
+
+      expect(result.chatTitleKey).toBe('CHAT.TITLE.DEFAULT');
+    });
+
+    it('should use default title key for unknown currentChat.type', () => {
+      const unknownTypeChat = { id: 'unknown', topic: 'Unknown', type: 'SOME_UNKNOWN_TYPE' as any };
+
+      const result = fromSelectors.selectChatAssistantViewModel.projector(
+        mockChats,
+        unknownTypeChat,
+        mockMessages,
+        baseMockState
       );
 
       expect(result.chatTitleKey).toBe('CHAT.TITLE.DEFAULT');
@@ -270,7 +283,7 @@ describe('ChatAssistant Selectors', () => {
 
       const result = fromSelectors.selectChatAssistantViewModel.projector(
         mockChats,
-        mockCurrentChat,
+        undefined,
         mockMessages,
         mockState
       );

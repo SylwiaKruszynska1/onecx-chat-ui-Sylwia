@@ -65,7 +65,7 @@ export class ChatListScreenComponent implements OnInit {
   filteredChats$: Observable<Chat[]>;
   searchQuery$: Observable<string>;
   searchQueryValue = '';
-
+  greetingTranslated$: Observable<string>;
 
   constructor(
     private readonly datePipe: DatePipe,
@@ -74,6 +74,7 @@ export class ChatListScreenComponent implements OnInit {
   ) { 
     this.filteredChats$ = this.store.select(selectFilteredChats);
     this.searchQuery$ = this.store.select(chatAssistantSelectors.selectSearchQuery);
+    this.greetingTranslated$ = this.getGreetingKey();
   }
 
   ngOnInit() {
@@ -140,5 +141,17 @@ export class ChatListScreenComponent implements OnInit {
   private getDaysDifference(date: Date): number {
     const now = new Date();
     return (now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24);
+  }
+
+  private getGreetingKey(): Observable<string> {
+    const hour = new Date().getHours();
+    
+    if (hour >= 5 && hour < 12) {
+      return this.translate.get('CHAT.INITIAL.GREETING_MORNING');
+    } else if (hour >= 12 && hour < 18) {
+      return this.translate.get('CHAT.INITIAL.GREETING_AFTERNOON');
+    } else {
+      return this.translate.get('CHAT.INITIAL.GREETING_EVENING');
+    }
   }
 }

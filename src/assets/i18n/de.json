@@ -126,7 +126,9 @@
       "DELETE_CHAT": "Chat gelöscht."
     },
     "INITIAL": {
-      "GREETING": "Guten Tag!",
+      "GREETING_MORNING": "Guten Morgen!",
+      "GREETING_AFTERNOON": "Guten Tag!",
+      "GREETING_EVENING": "Guten Abend!",
       "NO_CHATS": "Sie haben keine bestehenden Chats.",
       "CREATE_NEW": "Neuen Chat erstellen?"
     },

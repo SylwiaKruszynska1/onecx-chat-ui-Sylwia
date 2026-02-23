@@ -552,6 +552,20 @@ describe('ChatAssistantEffects', () => {
         done();
       });
     });
+
+    it('should default to AiChat when currentChat is undefined', (done) => {
+      const message = 'Message when currentChat is undefined';
+      const action = ChatAssistantActions.createNewChatForMessage({ message });
+      store.overrideSelector(chatAssistantSelectors.selectCurrentChat, undefined);
+      actions$ = of(action);
+
+      effects.createChatAndSendMessage$.subscribe(() => {
+        expect(chatInternalService.createChat).toHaveBeenCalledWith(
+          expect.objectContaining({ type: ChatType.AiChat })
+        );
+        done();
+      });
+    });
   });
 
   describe('sendMessage$', () => {

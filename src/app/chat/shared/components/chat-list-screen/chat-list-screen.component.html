@@ -5,6 +5,7 @@
     (closed)="selectMode.emit('close')"
   ></app-chat-header>
   <div class="flex flex-column flex-1 items-center text-center overflow-y-auto">
+    @if (((filteredChats$ | async)?.length ?? 0) > 0) {
     <input
       pInputText
       id="chat-search-input"
@@ -71,9 +72,18 @@
         }
       </p-tabPanel>
     </p-tabView>
+    } @else {
+      <div class="text-center" style="padding-top:20vh">
+        <i class="pi pi-comment text-6xl"></i>
+        <div class="mt-3">
+          <p> {{ 'CHAT.LIST.NO_CHATS' | translate }} </p>
+          <p> {{ 'CHAT.LIST.CREATE_NEW' | translate }} </p>
+        </div>
+      </div>
+    }
   </div>
-  <div class="flex justify-content-center w-full mt-2">
-    <p-inputGroup class="md:w-30rem pb-2">
+  <div class="flex justify-content-center w-full p-3 border-top-1 border-200">
+    <p-inputGroup class="md:w-30rem">
       <p-button type="button" icon="pi pi-plus" class="p-button-plain" [disabled]="true" aria-label="Chat type icon"></p-button>
       <p-selectButton
         [options]="chatModeOptions"

@@ -20,7 +20,6 @@ import { ChatComponent } from 'src/app/shared/components/chat/chat.component';
 import { Chat, ChatType } from 'src/app/shared/generated';
 import { environment } from 'src/environments/environment';
 import { ChatHeaderComponent } from '../../shared/components/chat-header/chat-header.component';
-import { ChatInitialScreenComponent } from '../../shared/components/chat-initial-screen/chat-initial-screen.component';
 import { ChatListScreenComponent } from '../../shared/components/chat-list-screen/chat-list-screen.component';
 import { ChatSliderComponent } from '../../shared/components/chat-silder/chat-slider.component';
 import { ChatAssistantActions } from './chat-assistant.actions';
@@ -45,7 +44,6 @@ import { ChatAssistantViewModel } from './chat-assistant.viewmodel';
     TooltipModule,
     ChatSliderComponent,
     ChatHeaderComponent,
-    ChatInitialScreenComponent,
     ChatListScreenComponent,
   ],
 })

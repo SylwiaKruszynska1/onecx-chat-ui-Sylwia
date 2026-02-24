@@ -128,9 +128,7 @@
     "INITIAL": {
       "GREETING_MORNING": "Guten Morgen!",
       "GREETING_AFTERNOON": "Guten Tag!",
-      "GREETING_EVENING": "Guten Abend!",
-      "NO_CHATS": "Sie haben keine bestehenden Chats.",
-      "CREATE_NEW": "Neuen Chat erstellen?"
+      "GREETING_EVENING": "Guten Abend!"
     },
     "LIST": {
       "SEARCH_PLACEHOLDER": "Chats durchsuchen...",
@@ -138,7 +136,9 @@
       "ALL_CHATS": "Alle Chats",
       "AI": "KI",
       "START": "Starten",
-      "NO_MATCHING_CHATS": "Keine passenden Chats gefunden"
+      "NO_MATCHING_CHATS": "Keine passenden Chats gefunden",
+      "NO_CHATS": "Sie haben keine bestehenden Chats.",
+      "CREATE_NEW": "Neuen Chat erstellen?"
     },
     "OPTION": {
       "AI_SUBTITLE": "intelligente Antworten",

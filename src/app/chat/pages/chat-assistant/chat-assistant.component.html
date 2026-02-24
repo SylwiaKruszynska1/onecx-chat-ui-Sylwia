@@ -8,18 +8,12 @@
   @if (vm) {
     <div class="onecx-companion-container">
       @if (!vm.selectedChatMode && !vm.currentChat) {
-        @if (vm.chats && vm.chats.length > 0) {
-          <app-chat-list-screen
-            (selectMode)="selectChatMode($event)"
-            (chatSelected)="chatSelected($event)"
-            (deleteChat)="deleteChat($event)"
-            [chats]="vm.chats"
-          ></app-chat-list-screen>
-        } @else {
-          <app-chat-initial-screen
-            (selectMode)="selectChatMode($event)"
-          ></app-chat-initial-screen>
-        }
+        <app-chat-list-screen
+          (selectMode)="selectChatMode($event)"
+          (chatSelected)="chatSelected($event)"
+          (deleteChat)="deleteChat($event)"
+          [chats]="vm.chats ?? []"
+        ></app-chat-list-screen>
       } @else {
         <div class="chat-interface" [@slideIn]>
           <app-chat-header

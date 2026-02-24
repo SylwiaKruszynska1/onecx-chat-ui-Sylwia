@@ -129,9 +129,7 @@
     "INITIAL": {
       "GREETING_MORNING": "Good morning!",
       "GREETING_AFTERNOON": "Good afternoon!",
-      "GREETING_EVENING": "Good evening!",
-      "NO_CHATS": "You don't have existing chats.",
-      "CREATE_NEW": "Create a new one?"
+      "GREETING_EVENING": "Good evening!"
     },
     "LIST": {
       "SEARCH_PLACEHOLDER": "Search Chats...",
@@ -139,7 +137,9 @@
       "ALL_CHATS": "All Chats",
       "AI": "AI",
       "START": "Start",
-      "NO_MATCHING_CHATS": "No matching chats found"
+      "NO_MATCHING_CHATS": "No matching chats found",
+      "NO_CHATS": "You don't have existing chats.",
+      "CREATE_NEW": "Create a new one?"
     },
     "OPTION": {
       "AI_SUBTITLE": "smart answers",

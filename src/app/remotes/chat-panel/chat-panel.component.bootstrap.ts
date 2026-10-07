@@ -34,7 +34,7 @@ function userProfileInitializer(userService: UserService) {
   }
 }
 
-bootstrapRemoteComponent(
+void bootstrapRemoteComponent(
   OneCXChatPanelComponent,
   'ocx-chat-panel-component',
   environment.production,

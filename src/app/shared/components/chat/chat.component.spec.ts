@@ -328,5 +328,76 @@ describe('ChatComponent', () => {
       expect((component as any).unreadCount).toBe(0)
       expect(fixture.nativeElement.querySelector('app-new-message-indicator')).toBeNull()
     })
+
+    it('should scroll instantly to the latest message when messages are loaded into an empty chat', () => {
+      fixture.componentRef.setInput('chatMessages', [])
+      fixture.detectChanges()
+      const scrollToBottomSpy = jest.spyOn(scrollService, 'scrollToBottom')
+      setScrollDimensions(scrollContainer, { scrollHeight: 800, scrollTop: 0, clientHeight: 300 })
+      scrollService.checkPosition()
+
+      fixture.componentRef.setInput('chatMessages', [createMessage('1'), createMessage('2')])
+      fixture.detectChanges()
+
+      expect(scrollToBottomSpy).toHaveBeenCalledWith('auto')
+      expect(scrollContainer.scrollTop).toBe(800)
+      expect(component.unreadCount).toBe(0)
+    })
+  })
+
+  describe('resize handling', () => {
+    let resizeCallback: ResizeObserverCallback | undefined
+    let observedElements: Element[]
+    const disconnect = jest.fn()
+    const originalResizeObserver = (globalThis as any).ResizeObserver
+
+    beforeEach(() => {
+      fixture.destroy()
+      observedElements = []
+      ;(globalThis as any).ResizeObserver = jest.fn((callback: ResizeObserverCallback) => {
+        resizeCallback = callback
+        return { observe: (element: Element) => observedElements.push(element), disconnect }
+      })
+
+      fixture = TestBed.createComponent(ChatComponent)
+      component = fixture.componentInstance
+      fixture.detectChanges()
+    })
+
+    afterEach(() => {
+      ;(globalThis as any).ResizeObserver = originalResizeObserver
+    })
+
+    it('should observe the message history and its content', () => {
+      const scrollContainer: HTMLElement = fixture.nativeElement.querySelector('.chat-history-container')
+
+      expect(observedElements).toEqual([scrollContainer, scrollContainer.firstElementChild])
+    })
+
+    it('should keep the latest message visible when the history resizes while at the bottom', () => {
+      const scrollContainer: HTMLElement = fixture.nativeElement.querySelector('.chat-history-container')
+      setScrollDimensions(scrollContainer, { scrollHeight: 800, scrollTop: 500, clientHeight: 300 })
+
+      setScrollDimensions(scrollContainer, { scrollHeight: 1000, scrollTop: 500, clientHeight: 300 })
+      resizeCallback?.([], {} as ResizeObserver)
+
+      expect(scrollContainer.scrollTop).toBe(1000)
+    })
+
+    it('should not move the history when the user scrolled up', () => {
+      const scrollContainer: HTMLElement = fixture.nativeElement.querySelector('.chat-history-container')
+      setScrollDimensions(scrollContainer, { scrollHeight: 800, scrollTop: 100, clientHeight: 300 })
+      scrollContainer.dispatchEvent(new Event('scroll'))
+
+      resizeCallback?.([], {} as ResizeObserver)
+
+      expect(scrollContainer.scrollTop).toBe(100)
+    })
+
+    it('should disconnect the observer on destroy', () => {
+      fixture.destroy()
+
+      expect(disconnect).toHaveBeenCalled()
+    })
   })
 })

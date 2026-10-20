@@ -5,6 +5,7 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  DestroyRef,
   ElementRef,
   EventEmitter,
   Input,
@@ -116,7 +117,8 @@ export class ChatComponent implements AfterViewInit, AfterViewChecked, OnChanges
   constructor(
     private readonly translateService: TranslateService,
     private readonly chatScrollService: ChatScrollService,
-    private readonly changeDetectorRef: ChangeDetectorRef
+    private readonly changeDetectorRef: ChangeDetectorRef,
+    private readonly destroyRef: DestroyRef
   ) {
     this.formGroup = new FormGroup({
       message: new FormControl(null, [Validators.minLength(1), Validators.maxLength(255), Validators.required])
@@ -152,7 +154,9 @@ export class ChatComponent implements AfterViewInit, AfterViewChecked, OnChanges
     const addedMessageCount = Math.max(currentMessages.length - previousMessages.length, 0)
     if (addedMessageCount === 0) return
 
-    if (this.isAtBottom) {
+    if (previousMessages.length === 0) {
+      this.scrollAfterRender = 'auto'
+    } else if (this.isAtBottom) {
       this.scrollAfterRender = 'smooth'
     } else {
       this.unreadCount += addedMessageCount
@@ -163,7 +167,27 @@ export class ChatComponent implements AfterViewInit, AfterViewChecked, OnChanges
   ngAfterViewInit(): void {
     if (this.scrollContainer) {
       this.chatScrollService.init(this.scrollContainer.nativeElement)
+      this.keepScrolledToBottomOnResize(this.scrollContainer.nativeElement)
     }
+  }
+
+  /**
+   * Keeps the latest message visible while the container or its content changes size
+   * (e.g. layout settling after opening a chat or streamed message text).
+   */
+  private keepScrolledToBottomOnResize(container: HTMLElement): void {
+    if (typeof ResizeObserver === 'undefined') return
+
+    const resizeObserver = new ResizeObserver(() => {
+      if (this.isAtBottom) {
+        this.chatScrollService.scrollToBottom('auto')
+      }
+    })
+    resizeObserver.observe(container)
+    if (container.firstElementChild) {
+      resizeObserver.observe(container.firstElementChild)
+    }
+    this.destroyRef.onDestroy(() => resizeObserver.disconnect())
   }
 
   ngAfterViewChecked(): void {

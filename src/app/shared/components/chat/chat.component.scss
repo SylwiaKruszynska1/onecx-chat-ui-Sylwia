@@ -169,3 +169,12 @@
     padding-right: 0.3rem;
   }
 }
+
+/*
+ * Optional cap for the message list. Hosts that cannot provide a definite height
+ * (e.g. content-sized slot containers) set --chat-messages-max-height so that the
+ * list scrolls internally instead of growing indefinitely.
+ */
+.chat-history-container {
+  max-height: var(--chat-messages-max-height, none);
+}

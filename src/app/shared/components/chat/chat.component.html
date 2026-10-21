@@ -1,17 +1,17 @@
 <div class="chat-container flex flex-column h-full min-w-0 min-h-0 overflow-hidden">
-  <div class="chat-history-wrapper flex-1 min-h-0 relative">
+  <div class="chat-history-wrapper flex-1 min-h-0 min-w-0 relative">
     <div class="chat-history-container h-full overflow-y-auto" #scrollContainer>
       <div class="chat-messages flex flex-column gap-2 p-2 align-items-stretch">
         @for (message of chatMessages; track message.id) {
           <div
-            style="width: 98%"
+            class="chat-message"
             [class.align-self-start]="message.type === 'SYSTEM' || message.type === 'ASSISTANT'"
             [class.align-self-end]="message.type === 'HUMAN'"
             [class.message-streaming]="message.id === 'voice-bot-streaming' && voiceChatEnabled"
             [class.message-streaming-user]="message.id === 'voice-user-streaming' && voiceChatEnabled"
           >
             <div
-              class="p-2 border-round-lg border-1"
+              class="chat-message-bubble p-2 border-round-lg border-1"
               [class]="message.type === 'HUMAN' ? 'bg-blue-100 border-blue-300' : 'surface-100 border-surface-300'"
             >
               @if (message.type !== 'HUMAN') {
@@ -88,7 +88,7 @@
     }
   </ng-template>
 
-  <div class="p-2 flex align-items-center gap-2">
+  <div class="chat-input-container p-2 flex align-items-center gap-2">
     @if (!voiceChatEnabled) {
       <form [formGroup]="formGroup" class="w-full">
         <div

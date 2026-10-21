@@ -49,8 +49,7 @@ export function slotInitializer(slotService: SlotService) {
     ChatsService
   ],
   host: {
-    style:
-      'display: block; flex: 0 0 auto; height: 100%; min-height: 0; overflow: hidden; align-self: stretch; --chat-messages-max-height: 70dvh;'
+    style: 'display: block; flex: 0 0 auto; height: 100%; min-height: 0; overflow: hidden; align-self: stretch;'
   },
   templateUrl: './chat-panel.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush

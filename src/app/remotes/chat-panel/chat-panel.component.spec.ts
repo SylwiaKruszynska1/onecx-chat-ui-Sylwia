@@ -84,6 +84,18 @@ describe('OneCXChatPanelComponent', () => {
     })
   })
 
+  describe('height', () => {
+    it('should fill the viewport below the top edge of the host', () => {
+      setUp()
+      jest.spyOn(fixture.nativeElement, 'getBoundingClientRect').mockReturnValue({ top: 64 } as DOMRect)
+      Object.defineProperty(window, 'innerHeight', { value: 800, configurable: true })
+
+      window.dispatchEvent(new Event('resize'))
+
+      expect(fixture.nativeElement.style.height).toBe('736px')
+    })
+  })
+
   describe('ocxInitRemoteComponent', () => {
     it('should emit config on remoteComponentConfig subject', () => {
       setUp()

@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, Inject, Input } from '@angular/core'
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  HostListener,
+  Inject,
+  Input
+} from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { TooltipModule } from 'primeng/tooltip'
@@ -49,12 +57,12 @@ export function slotInitializer(slotService: SlotService) {
     ChatsService
   ],
   host: {
-    style: 'display: block; flex: 0 0 auto; height: 100%; min-height: 0; overflow: hidden; align-self: stretch;'
+    style: 'display: block; flex: 0 0 auto; height: 100dvh; min-height: 0; overflow: hidden; align-self: stretch;'
   },
   templateUrl: './chat-panel.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class OneCXChatPanelComponent implements ocxRemoteComponent, ocxRemoteWebcomponent {
+export class OneCXChatPanelComponent implements ocxRemoteComponent, ocxRemoteWebcomponent, AfterViewInit {
   permissions: string[] = []
   loading = true
 
@@ -66,9 +74,22 @@ export class OneCXChatPanelComponent implements ocxRemoteComponent, ocxRemoteWeb
     @Inject(REMOTE_COMPONENT_CONFIG) private readonly remoteComponentConfig: ReplaySubject<RemoteComponentConfig>,
     private readonly chatInternal: ChatInternalService,
     private readonly userService: UserService,
-    private readonly translateService: TranslateService // private readonly bookmarkApiUtils: BookmarkAPIUtilsService
+    private readonly translateService: TranslateService, // private readonly bookmarkApiUtils: BookmarkAPIUtilsService
+    private readonly hostRef: ElementRef<HTMLElement>
   ) {
     this.translateService.use(this.userService.lang$.getValue())
+  }
+
+  ngAfterViewInit(): void {
+    this.fitHeightToViewport()
+  }
+
+  // Shell slots are sized by their content, so a percentage height never resolves.
+  // The panel therefore takes the viewport height that remains below its own top edge.
+  @HostListener('window:resize')
+  fitHeightToViewport(): void {
+    const host = this.hostRef.nativeElement
+    host.style.height = `${Math.max(0, window.innerHeight - host.getBoundingClientRect().top)}px`
   }
 
   ocxInitRemoteComponent(config: RemoteComponentConfig): void {

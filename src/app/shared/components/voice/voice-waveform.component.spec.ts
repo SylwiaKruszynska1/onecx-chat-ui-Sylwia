@@ -71,7 +71,7 @@ describe('VoiceWaveformComponent', () => {
 
   it('should be created', () => {
     expect(component).toBeTruthy()
-    expect(component.barLevels).toEqual([0.2, 0.2, 0.2, 0.2, 0.2])
+    expect(component.barLevels).toEqual(component.waveformBars.map(() => 0.2))
   })
 
   it('should be a no-op when the active flag does not change', () => {
@@ -93,7 +93,7 @@ describe('VoiceWaveformComponent', () => {
 
     expect(spy).toHaveBeenCalledTimes(1)
     // The meter ran once synchronously, producing animated bar levels.
-    expect(component.barLevels).toHaveLength(5)
+    expect(component.barLevels).toHaveLength(component.waveformBars.length)
     expect(component.barLevels[0]).toBeGreaterThan(0.2)
     // A further frame was scheduled.
     expect(rafCallbacks.length).toBeGreaterThan(0)
@@ -124,7 +124,22 @@ describe('VoiceWaveformComponent', () => {
 
     expect(close).toHaveBeenCalled()
     expect(component.audioLevel).toBe(0)
-    expect(component.barLevels).toEqual([0.2, 0.2, 0.2, 0.2, 0.2])
+    expect(component.barLevels).toEqual(component.waveformBars.map(() => 0.2))
+  })
+
+  it('should restart the meter on the new stream when the stream changes', () => {
+    const spy = installContext()
+    component.active = true
+    component.stream = createFakeStream()
+    component.ngOnChanges(activeChanges())
+    const firstClose = FakeAudioContext.instance?.close
+
+    const newStream = createFakeStream()
+    component.stream = newStream
+    component.ngOnChanges({ stream: new SimpleChange(createFakeStream(), newStream, false) })
+
+    expect(firstClose).toHaveBeenCalled()
+    expect(spy).toHaveBeenCalledTimes(2)
   })
 
   it('should fall back to an idle meter if the audio context throws', () => {
@@ -138,7 +153,7 @@ describe('VoiceWaveformComponent', () => {
     expect(() => component.ngOnChanges(activeChanges())).not.toThrow()
 
     expect(error).toHaveBeenCalled()
-    expect(component.barLevels).toEqual([0.2, 0.2, 0.2, 0.2, 0.2])
+    expect(component.barLevels).toEqual(component.waveformBars.map(() => 0.2))
   })
 
   it('should advance the meter on requestAnimationFrame', () => {
@@ -155,6 +170,21 @@ describe('VoiceWaveformComponent', () => {
     expect(component.audioLevel).toBeGreaterThanOrEqual(0)
     // The phase advanced, so at least one bar differs from the first frame.
     expect(component.barLevels).not.toEqual(before)
+  })
+
+  it('should log an error when closing the audio context fails', async () => {
+    const error = jest.spyOn(console, 'error').mockImplementation(() => undefined)
+    installContext()
+    component.active = true
+    component.stream = createFakeStream()
+    component.ngOnChanges(activeChanges())
+    FakeAudioContext.instance?.close.mockRejectedValue(new Error('close failed'))
+
+    component.ngOnDestroy()
+    await Promise.resolve()
+    await Promise.resolve()
+
+    expect(error).toHaveBeenCalledWith(expect.any(Error))
   })
 
   it('should clean up on destroy', () => {

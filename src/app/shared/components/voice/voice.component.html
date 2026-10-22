@@ -1,32 +1,60 @@
-<div class="flex align-items-center gap-2">
+<div class="voice-controls flex align-items-center gap-2">
+  @if (voiceChatEnabled) {
+    <div class="voice-live" [class.voice-live-muted]="isMuted()">
+      <span class="voice-live-dot"></span>
+      <output class="voice-live-status">{{ (isMuted() ? 'VOICE.MUTED' : 'VOICE.LISTENING') | translate }}</output>
+      <app-voice-waveform [stream]="micStream()" [active]="voiceChatEnabled && !isMuted()"></app-voice-waveform>
+    </div>
+
+    <div class="voice-mic-group flex align-items-center">
+      <p-button
+        icon="pi pi-microphone"
+        [rounded]="true"
+        [severity]="isMuted() ? 'danger' : 'secondary'"
+        [text]="!isMuted()"
+        [pTooltip]="isMuted() ? ('VOICE.UNMUTE_TOOLTIP' | translate) : ('VOICE.MUTE_TOOLTIP' | translate)"
+        [ariaLabel]="isMuted() ? ('VOICE.UNMUTE_TOOLTIP' | translate) : ('VOICE.MUTE_TOOLTIP' | translate)"
+        (click)="toggleMute()"
+        [styleClass]="isMuted() ? 'voice-mute-button voice-mute-button-muted' : 'voice-mute-button'"
+      ></p-button>
+
+      <p-menu
+        #microphoneMenu
+        [model]="microphoneMenuItems()"
+        [popup]="true"
+        appendTo="body"
+        styleClass="voice-mic-menu"
+      >
+        <ng-template #start>
+          <div class="voice-mic-menu-title">{{ 'VOICE.SELECT_MICROPHONE' | translate }}</div>
+        </ng-template>
+      </p-menu>
+      <p-button
+        icon="pi pi-chevron-up"
+        [rounded]="true"
+        [text]="true"
+        severity="secondary"
+        [disabled]="!microphonesAvailable()"
+        [pTooltip]="'VOICE.SELECT_MICROPHONE' | translate"
+        [ariaLabel]="'VOICE.SELECT_MICROPHONE' | translate"
+        (click)="microphoneMenu.toggle($event)"
+        styleClass="voice-mic-button"
+      ></p-button>
+    </div>
+  }
+
   <p-button
-    [icon]="voiceChatEnabled ? '' : 'pi pi-wave-pulse'"
-    [rounded]="!voiceChatEnabled"
+    [icon]="voiceChatEnabled ? 'pi pi-stop-circle' : 'pi pi-wave-pulse'"
+    [label]="voiceChatEnabled ? ('VOICE.STOP_RECORDING' | translate) : undefined"
+    [rounded]="true"
+    [severity]="voiceChatEnabled ? 'danger' : undefined"
     [pTooltip]="
       voiceChatEnabled ? ('VOICE.STOP_RECORDING_TOOLTIP' | translate) : ('VOICE.START_RECORDING_TOOLTIP' | translate)
     "
     [loading]="isConnecting()"
     (click)="onClick()"
     styleClass="voice-record-button"
-  >
-    @if (voiceChatEnabled) {
-      <span class="mr-2">
-        {{ 'VOICE.STOP_RECORDING' | translate }}
-      </span>
-      <app-voice-waveform [stream]="micStream()" [active]="voiceChatEnabled && !isMuted()"></app-voice-waveform>
-    }
-  </p-button>
-
-  @if (voiceChatEnabled) {
-    <p-button
-      icon="pi pi-microphone"
-      [rounded]="true"
-      [severity]="isMuted() ? 'danger' : 'success'"
-      [pTooltip]="isMuted() ? ('VOICE.UNMUTE_TOOLTIP' | translate) : ('VOICE.MUTE_TOOLTIP' | translate)"
-      (click)="toggleMute()"
-      styleClass="voice-mute-button"
-    ></p-button>
-  }
+  ></p-button>
 </div>
 
 <audio #botAudio autoplay></audio>

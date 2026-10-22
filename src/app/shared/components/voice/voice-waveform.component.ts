@@ -11,7 +11,10 @@ export class VoiceWaveformComponent implements OnChanges, OnDestroy {
   @Input({ required: true }) active = false
 
   audioLevel = 0
-  readonly waveformBars = [0.35, 0.6, 0.9, 0.6, 0.35]
+  readonly waveformBars = Array.from(
+    { length: 24 },
+    (_, index) => 0.35 + 0.65 * Math.sin((Math.PI * (index + 0.5)) / 24)
+  )
   barLevels = this.waveformBars.map(() => 0.2)
 
   private audioContext?: AudioContext
@@ -22,6 +25,10 @@ export class VoiceWaveformComponent implements OnChanges, OnDestroy {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['active'] || changes['stream']) {
+      if (changes['stream'] && !changes['stream'].firstChange) {
+        // A different microphone was selected: the meter must listen to the new stream.
+        this.stopAudioMeter()
+      }
       if (this.active && this.stream) {
         void this.startAudioMeter(this.stream)
       } else {

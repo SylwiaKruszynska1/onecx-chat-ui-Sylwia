@@ -7,7 +7,6 @@ import { routerNavigatedAction } from '@ngrx/router-store'
 import { Store } from '@ngrx/store'
 import {
   catchError,
-  combineLatestWith,
   debounceTime,
   distinctUntilChanged,
   EMPTY,
@@ -250,7 +249,8 @@ export class ChatAssistantEffects implements OnDestroy {
     return this.actions$.pipe(
       ofType(ChatAssistantActions.notificationReceived),
       filter(({ notification }) => !!notification && notification.body.applicationId === 'onecx-chat'),
-      combineLatestWith(this.store.select(chatAssistantSelectors.selectCurrentChat)),
+      // Only read the current chat when a notification arrives; re-evaluating it on every chat change would replay old notifications
+      concatLatestFrom(() => [this.store.select(chatAssistantSelectors.selectCurrentChat)]),
       map(([{ notification }, currentChat]) => {
         const parsed = parseChatNotification(notification)
         if (parsed?.type === 'update_chat') {

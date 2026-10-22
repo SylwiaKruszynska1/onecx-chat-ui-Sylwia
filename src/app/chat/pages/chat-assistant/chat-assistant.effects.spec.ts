@@ -670,6 +670,28 @@ describe('ChatAssistantEffects', () => {
       })
     })
 
+    it('should not replay a handled notification when the current chat changes afterwards', () => {
+      store.overrideSelector(chatAssistantSelectors.selectCurrentChat, mockChat as any)
+      store.refreshState()
+
+      const notification = createNotification('onecx-chat', [
+        { key: 'type', value: 'update_chat' },
+        { key: 'chatId', value: 'chat1' }
+      ])
+      const actionSubject = new Subject<any>()
+      actions$ = actionSubject.asObservable()
+
+      const results: any[] = []
+      const subscription = effects.handleChatNotifications$.subscribe((result) => results.push(result))
+
+      actionSubject.next(ChatAssistantActions.notificationReceived({ notification }))
+      store.overrideSelector(chatAssistantSelectors.selectCurrentChat, undefined)
+      store.refreshState()
+      subscription.unsubscribe()
+
+      expect(results).toEqual([ChatAssistantActions.refreshCurrentChat()])
+    })
+
     it('should dispatch chatNotificationIgnored for unknown chat notifications', (done) => {
       store.overrideSelector(chatAssistantSelectors.selectCurrentChat, mockChat as any)
       store.refreshState()

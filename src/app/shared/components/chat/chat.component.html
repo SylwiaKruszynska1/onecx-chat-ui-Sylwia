@@ -80,7 +80,11 @@
       </div>
     }
     @if (message.isLoadingInfo) {
-      <p-progressBar mode="indeterminate" [style]="{ height: '6px' }" />
+      <output class="typing-indicator" [attr.aria-label]="'CHAT.ACTIONS.SEND_DISABLED' | translate">
+        <span class="typing-dot"></span>
+        <span class="typing-dot"></span>
+        <span class="typing-dot"></span>
+      </output>
     }
   </ng-template>
 

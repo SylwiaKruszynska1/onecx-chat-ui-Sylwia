@@ -22,7 +22,6 @@ import { AvatarModule } from 'primeng/avatar'
 import { ButtonModule } from 'primeng/button'
 import { CardModule } from 'primeng/card'
 import { InputTextModule } from 'primeng/inputtext'
-import { ProgressBarModule } from 'primeng/progressbar'
 import { SelectModule } from 'primeng/select'
 import { TextareaModule } from 'primeng/textarea'
 
@@ -49,7 +48,6 @@ import { ChatScrollService } from '../../services/chat-scroll.service'
     FormsModule,
     TextareaModule,
     TranslateModule,
-    ProgressBarModule,
     TooltipModule,
     MarkdownPipe,
     NgTemplateOutlet,

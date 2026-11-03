@@ -158,7 +158,7 @@ export class ChatAssistantComponent implements OnChanges {
     this._sidebarVisible = false
     this.sidebarVisibleChange.emit(false)
     this.store.dispatch(ChatAssistantActions.chatPanelClosed())
-    this.visibilityTopic.publish(false)
+    this.visibilityTopic.publish(false).catch((err) => console.error(err))
   }
 
   @HostListener('document:keydown.escape')

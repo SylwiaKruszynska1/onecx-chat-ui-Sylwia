@@ -61,6 +61,18 @@ describe('OneCXChatToggleComponent', () => {
     expect(publishSpy).toHaveBeenNthCalledWith(2, false)
   })
 
+  it('should log an error when toggling visibility publish rejects', async () => {
+    const error = new Error('toggle publish failed')
+    const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => undefined)
+    jest.spyOn(ChatPanelVisibilityTopic.prototype, 'publish').mockRejectedValue(error)
+
+    component.visible = false
+    component.toggle()
+    await Promise.resolve()
+
+    expect(consoleErrorSpy).toHaveBeenCalledWith(error)
+  })
+
   it('should expose the expanded state on the button', async () => {
     const button: HTMLButtonElement = fixture.nativeElement.querySelector('button')
     expect(button.getAttribute('aria-expanded')).toBe('false')

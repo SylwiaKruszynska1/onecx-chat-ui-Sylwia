@@ -20,11 +20,6 @@
 }
 
 :host ::ng-deep {
-  /* Avatar shape circle, AI accent colours */
-  .p-avatar {
-    border-radius: 50% !important;
-  }
-
   .chat-message-avatar.p-avatar {
     flex: 0 0 auto;
     width: 2rem;

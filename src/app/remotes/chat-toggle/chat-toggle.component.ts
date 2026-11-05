@@ -46,6 +46,6 @@ export class OneCXChatToggleComponent implements ocxRemoteComponent, ocxRemoteWe
   }
 
   toggle() {
-    this.visibilityTopic.publish(!this.visible)
+    this.visibilityTopic.publish(!this.visible).catch((err) => console.error(err))
   }
 }

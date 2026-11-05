@@ -49,4 +49,4 @@ bootstrapRemoteComponent(
     provideAppInitializer(() => inject(UserService).isInitialized)
   ],
   { usePortalLayoutStyles: false }
-)
+).catch((err) => console.error(err))

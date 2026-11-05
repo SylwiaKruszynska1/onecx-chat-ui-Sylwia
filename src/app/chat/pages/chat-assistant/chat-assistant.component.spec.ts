@@ -235,6 +235,18 @@ describe('ChatAssistantComponent', () => {
 
       expect(publishSpy).toHaveBeenCalledWith(false)
     })
+
+    it('should log an error when publishing closed visibility rejects', async () => {
+      const error = new Error('close publish failed')
+      const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => undefined)
+      jest.spyOn(ChatPanelVisibilityTopic.prototype, 'publish').mockRejectedValue(error)
+      component._sidebarVisible = true
+
+      component.closeSidebar()
+      await Promise.resolve()
+
+      expect(consoleErrorSpy).toHaveBeenCalledWith(error)
+    })
   })
 
   describe('escape key', () => {

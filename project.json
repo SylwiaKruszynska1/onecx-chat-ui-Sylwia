@@ -36,7 +36,7 @@
         ],
         "scripts": ["node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js"],
         "customWebpackConfig": {
-          "path": "webpack.config.ts"
+          "path": "webpack.config.js"
         },
         "main": "./src/main.ts"
       },
@@ -61,8 +61,9 @@
               "with": "src/environments/environment.prod.ts"
             }
           ],
+          "extractLicenses": false,
           "customWebpackConfig": {
-            "path": "webpack.config.ts"
+            "path": "webpack.config.js"
           }
         },
         "development": {

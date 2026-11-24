@@ -11,7 +11,6 @@ import { ofType } from '@ngrx/effects'
 import { Store, StoreModule } from '@ngrx/store'
 import { MockStore, provideMockStore } from '@ngrx/store/testing'
 import { TranslateService } from '@ngx-translate/core'
-import { TranslateTestingModule } from 'ngx-translate-testing'
 import { firstValueFrom } from 'rxjs'
 
 import { provideUserServiceMock, provideAppStateServiceMock } from '@onecx/angular-integration-interface/mocks'
@@ -22,6 +21,7 @@ import {
   AngularAcceleratorModule
 } from '@onecx/angular-accelerator'
 import { UserService } from '@onecx/angular-integration-interface'
+import { provideTranslateTestingService } from '@onecx/angular-testing'
 import {
   AlwaysGrantPermissionChecker,
   PortalPageComponent,
@@ -104,10 +104,6 @@ describe('ChatSearchComponent', () => {
         LetDirective,
         ReactiveFormsModule,
         StoreModule.forRoot({}),
-        TranslateTestingModule.withTranslations({
-          en: require('./src/assets/i18n/en.json'),
-          de: require('./src/assets/i18n/de.json')
-        }).withDefaultLanguage('en'),
         NoopAnimationsModule
       ],
       providers: [
@@ -126,7 +122,11 @@ describe('ChatSearchComponent', () => {
         {
           provide: HAS_PERMISSION_CHECKER,
           useClass: AlwaysGrantPermissionChecker
-        }
+        },
+        provideTranslateTestingService({
+          de: require('src/assets/i18n/de.json'),
+          en: require('src/assets/i18n/en.json')
+        })
       ]
     }).compileComponents()
 

@@ -1,7 +1,6 @@
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed'
 import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
-import { QueryList } from '@angular/core'
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms'
 import { NoopAnimationsModule } from '@angular/platform-browser/animations'
@@ -355,7 +354,7 @@ describe('ChatSearchComponent', () => {
 
     component.search(component.chatSearchFormGroup)
 
-    const searchCriteria = buildSearchCriteria(formValue.getRawValue(), new QueryList(), {
+    const searchCriteria = buildSearchCriteria(formValue.getRawValue(), [], {
       removeNullValues: true
     })
     store.scannedActions$.pipe(ofType(ChatSearchActions.searchButtonClicked)).subscribe((a) => {

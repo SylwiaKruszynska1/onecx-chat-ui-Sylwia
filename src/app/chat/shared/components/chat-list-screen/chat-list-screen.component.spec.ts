@@ -56,6 +56,10 @@ describe('ChatListScreenComponent', () => {
     })
     globalThis.MutationObserver = mutationObserverMock as any
 
+    const translate = TestBed.inject(TranslateService)
+    translate.setFallbackLang('en')
+    await firstValueFrom(translate.use('en'))
+
     fixture = TestBed.createComponent(ChatListScreenComponent)
     component = fixture.componentInstance
     fixture.detectChanges()

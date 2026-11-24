@@ -1,4 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
+import { TranslateService } from '@ngx-translate/core'
+import { firstValueFrom } from 'rxjs/internal/firstValueFrom'
+
 import { provideTranslateTestingService } from '@onecx/angular-testing'
 
 import { ChatHeaderComponent } from './chat-header.component'
@@ -17,6 +20,11 @@ describe('ChatHeaderComponent', () => {
         })
       ]
     }).compileComponents()
+
+    const translate = TestBed.inject(TranslateService)
+    translate.setFallbackLang('en')
+    await firstValueFrom(translate.use('en'))
+
     fixture = TestBed.createComponent(ChatHeaderComponent)
     component = fixture.componentInstance
     fixture.detectChanges()

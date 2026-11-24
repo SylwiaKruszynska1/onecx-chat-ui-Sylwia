@@ -25,7 +25,7 @@ import { chatSearchSelectors, selectChatSearchViewModel } from './chat-search.se
 @Injectable()
 export class ChatSearchEffects {
   private readonly actions$ = inject(Actions)
-  private readonly route = inject(ActivatedRoute, { skipSelf: true })
+  private readonly route = inject(ActivatedRoute)
   private readonly chatService = inject(ChatsService)
   private readonly router = inject(Router)
   private readonly store = inject(Store)

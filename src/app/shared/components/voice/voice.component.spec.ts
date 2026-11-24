@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { TranslateService } from '@ngx-translate/core'
-import { BehaviorSubject, ReplaySubject } from 'rxjs'
+import { BehaviorSubject, firstValueFrom, ReplaySubject } from 'rxjs'
 
 import { AuthProxyService } from '@onecx/angular-auth'
 import { UserService } from '@onecx/angular-integration-interface'
@@ -30,6 +30,10 @@ describe('VoiceComponent', () => {
         { provide: UserService, useValue: { getPermissions: () => permissions } }
       ]
     }).compileComponents()
+
+    const translate = TestBed.inject(TranslateService)
+    translate.setFallbackLang('en')
+    await firstValueFrom(translate.use('en'))
 
     fixture = TestBed.createComponent(VoiceComponent)
     component = fixture.componentInstance

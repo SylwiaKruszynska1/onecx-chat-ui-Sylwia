@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
-import { NoopAnimationsModule } from '@angular/platform-browser/animations'
 import { provideMockStore } from '@ngrx/store/testing'
 import { ReplaySubject, BehaviorSubject } from 'rxjs'
 
@@ -30,7 +29,7 @@ describe('OneCXChatPanelComponent', () => {
     rcConfig = new ReplaySubject<RemoteComponentConfig>(1)
 
     await TestBed.configureTestingModule({
-      imports: [OneCXChatPanelComponent, NoopAnimationsModule],
+      imports: [OneCXChatPanelComponent],
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),

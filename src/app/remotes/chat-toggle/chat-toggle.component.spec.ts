@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
-import { NoopAnimationsModule } from '@angular/platform-browser/animations'
 import { BehaviorSubject, ReplaySubject } from 'rxjs'
 
 import { UserService } from '@onecx/angular-integration-interface'
@@ -18,7 +17,7 @@ describe('OneCXChatToggleComponent', () => {
     rcConfig = new ReplaySubject<RemoteComponentConfig>(1)
 
     await TestBed.configureTestingModule({
-      imports: [OneCXChatToggleComponent, NoopAnimationsModule],
+      imports: [OneCXChatToggleComponent],
       providers: [
         provideTranslateTestingService({
           de: require('src/assets/i18n/de.json'),
